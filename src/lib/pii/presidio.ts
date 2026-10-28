@@ -33,5 +33,5 @@ export async function presidioAnalyze(url: string, text: string): Promise<Detect
   const rows = (await r.json()) as Array<{ entity_type: string; start: number; end: number; score: number }>;
   return rows
     .filter((x) => MAP[x.entity_type] && x.entity_type !== "DATE_TIME")
-    .map((x) => ({ start: x.start, end: x.end, type: MAP[x.entity_type], score: x.score, source: "presidio" as const }));
+    .map((x) => ({ start: x.start, end: x.end, type: MAP[x.entity_type]!, score: x.score, source: "presidio" as const }));
 }

@@ -275,7 +275,7 @@ export default function Redactor() {
                   <span>Min. confidence</span>
                   <span className="font-mono">{minScore.toFixed(2)}</span>
                 </div>
-                <Slider className="mt-2" min={0} max={1} step={0.05} value={[minScore]} onValueChange={(v) => setMinScore(v[0])} />
+                <Slider className="mt-2" min={0} max={1} step={0.05} value={[minScore]} onValueChange={(v) => setMinScore(v[0] ?? 0)} />
               </div>
               <div className="mt-3 flex gap-2">
                 <Input
