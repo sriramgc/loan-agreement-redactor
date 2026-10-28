@@ -60,15 +60,27 @@ export async function loadPdf(bytes: ArrayBuffer): Promise<PageData[]> {
   return pages;
 }
 
+let measureCtx: CanvasRenderingContext2D | null = null;
+function measure(s: string) {
+  if (!measureCtx) {
+    measureCtx = document.createElement("canvas").getContext("2d")!;
+    measureCtx.font = "20px Helvetica, Arial, sans-serif";
+  }
+  return measureCtx.measureText(s).width;
+}
+
 /** Map a character span on a page to rectangles (PDF points, top-left origin). */
 export function spanToBoxes(page: PageData, start: number, end: number): Box[] {
   const boxes: Box[] = [];
   for (const s of page.segs) {
     if (s.end <= start || s.start >= end) continue;
-    const len = Math.max(1, s.end - s.start);
+    const str = page.text.slice(s.start, s.end);
     const a = Math.max(start, s.start) - s.start;
     const b = Math.min(end, s.end) - s.start;
-    boxes.push({ x: s.x + (s.w * a) / len - 1, y: s.y - 1, w: (s.w * (b - a)) / len + 2, h: s.h + 2 });
+    const full = measure(str) || 1;
+    const x0 = (s.w * measure(str.slice(0, a))) / full;
+    const x1 = (s.w * measure(str.slice(0, b))) / full;
+    boxes.push({ x: s.x + x0 - 1, y: s.y - 1, w: x1 - x0 + 2, h: s.h + 2 });
   }
   return boxes;
 }
