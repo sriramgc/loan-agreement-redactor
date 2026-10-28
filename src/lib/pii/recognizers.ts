@@ -189,7 +189,7 @@ export function analyze(text: string, denyList: string[] = []): Detection[] {
       let value = m[0];
       let start = m.index;
       if (rule.group && m[rule.group]) {
-        value = m[rule.group];
+        value = m[rule.group]!;
         start = m.index + m[0].lastIndexOf(value);
       }
       if (rule.validate && !rule.validate(value)) continue;
