@@ -59,3 +59,11 @@ describe("notice addresses", () => {
     expect(found).toContain("Illinois 60601");
   });
 });
+
+describe("signature without By: label", () => {
+  it("finds the /s/ name and the Name: line", () => {
+    const t = "GXO LOGISTICS, INC.\n/s/ Zeeshan Naqvi\nName: Zeeshan Naqvi";
+    const people = analyze(t).filter((d) => d.type === "PERSON");
+    expect(people).toHaveLength(2);
+  });
+});
