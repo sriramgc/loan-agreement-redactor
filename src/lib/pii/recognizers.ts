@@ -174,6 +174,8 @@ const RULES: Rule[] = [
     score: 0.8,
     group: 1,
   },
+  // Electronic signature line on its own ("/s/ Jane Doe"), even when the "By:" label is missing.
+  { type: "PERSON", re: /\/s\/ *((?:[A-Z][a-z]+\.? +(?:[A-Z]\. +)?){1,2}[A-Z][a-zA-Z'-]+)/g, score: 0.9, group: 1 },
   { type: "PERSON", re: /\b(?:Mr|Mrs|Ms|Dr)\.? +((?:[A-Z][a-z]+ +)?[A-Z][a-zA-Z'-]+)/g, score: 0.8, group: 1 },
   {
     type: "PERSON",
