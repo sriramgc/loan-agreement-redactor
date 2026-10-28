@@ -12,7 +12,13 @@ Presidio is a Python library and can't run inside this app. For a fast demo we r
 - **Pattern detectors**: emails, phone numbers, SSN/TIN/EIN, IBAN/SWIFT/ABA routing, account and loan numbers, LoanIQ facility/deal/borrower IDs, CUSIP, dates of birth, postcodes/addresses.
 - **Context words** (like Presidio): confidence goes up when words such as "Account No.", "Attention:", "Borrower", "SSN" appear nearby.
 - **Name detection without AI**: names found next to "By:", "Name:", "Attention:", "Title:" and in notice/signature blocks, plus a list of common first names. A small custom "deny list" lets the reviewer add terms (e.g. the borrower's name) that are then found everywhere.
-- Later, a self-hosted Presidio service inside your own network could replace these detectors behind the same review screen.
+
+## Optional: real Presidio (self-hosted)
+Presidio is better at spotting names and addresses (it uses a local language model, not a cloud AI). It can't run inside this app, but you can run Microsoft's official Presidio container on your own machine or network:
+`docker run -p 5002:3000 mcr.microsoft.com/presidio-analyzer`
+- A "Detection engine" switch on the upload page: **Built-in** (default, works offline) or **Presidio** (enter its address, e.g. `http://localhost:5002`).
+- In Presidio mode the browser sends page text straight to your Presidio server; nothing goes to Lovable or any third party. Results feed the same review screen and are merged with the LoanIQ-specific patterns.
+- A "Test connection" button shows whether Presidio is reachable. Presidio needs CORS allowed for the app's address (setup note shown in the app).
 
 ## User flow
 ```text
