@@ -164,14 +164,14 @@ const RULES: Rule[] = [
   { type: "ADDRESS", re: /\b[A-Z]{2}\s\d{5}(?:-\d{4})?\b/g, score: 0.6 },
   {
     type: "PERSON",
-    re: /\b(?:Name|Attention|Attn|By|Signed|Guarantor)\s*[:.]\s*((?:[A-Z][a-z]+\.?\s+(?:[A-Z]\.\s+)?){1,2}[A-Z][a-zA-Z'-]+)/g,
+    re: /\b(?:Name|Attention|Attn|By|Signed|Guarantor)\s*[:.]\s*((?:[A-Z][a-z]+\.? +(?:[A-Z]\. +)?){1,2}[A-Z][a-zA-Z'-]+)/g,
     score: 0.8,
     group: 1,
   },
-  { type: "PERSON", re: /\b(?:Mr|Mrs|Ms|Dr)\.?\s+((?:[A-Z][a-z]+\s+)?[A-Z][a-zA-Z'-]+)/g, score: 0.8, group: 1 },
+  { type: "PERSON", re: /\b(?:Mr|Mrs|Ms|Dr)\.? +((?:[A-Z][a-z]+ +)?[A-Z][a-zA-Z'-]+)/g, score: 0.8, group: 1 },
   {
     type: "PERSON",
-    re: new RegExp(`\\b(?:${FIRST_NAMES.join("|")})\\s+(?:[A-Z]\\.\\s+)?[A-Z][a-zA-Z'-]+\\b`, "g"),
+    re: new RegExp(`\\b(?:${FIRST_NAMES.join("|")})\ +(?:[A-Z]\\.\ +)?[A-Z][a-zA-Z'-]+\\b`, "g"),
     score: 0.65,
   },
 ];
