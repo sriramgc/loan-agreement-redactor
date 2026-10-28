@@ -3,36 +3,38 @@
 ## Goal
 Upload a credit agreement PDF, auto-detect personal and sensitive details, let a reviewer accept or reject each finding on a review screen, then download a new redacted PDF.
 
-## About Presidio
-Presidio is a Python library and this app's server can't run Python. For a fast demo, we copy Presidio's approach in the app instead:
-- **Pattern detectors** (like Presidio's recognizers): emails, phone numbers, SSN/TIN/EIN, IBAN/SWIFT, account and loan numbers, LoanIQ facility/deal IDs, CUSIP, dates of birth, addresses with postcodes.
-- **AI detector** (like Presidio's name/entity model, via Lovable AI): names of people, signatories, company contacts, addresses written in full text.
-Results from both are merged, with a confidence score and a label for each item.
+## Privacy: no AI, nothing leaves the browser
+- No AI services and no server processing. The PDF is read, analyzed and redacted entirely on the user's computer.
+- Nothing is uploaded or stored anywhere.
 
-Later, if needed, a real Presidio service could be hosted separately and plugged in behind the same review screen.
+## About Presidio
+Presidio is a Python library and can't run inside this app. For a fast demo we rebuild Presidio's rule-based approach in the browser:
+- **Pattern detectors**: emails, phone numbers, SSN/TIN/EIN, IBAN/SWIFT/ABA routing, account and loan numbers, LoanIQ facility/deal/borrower IDs, CUSIP, dates of birth, postcodes/addresses.
+- **Context words** (like Presidio): confidence goes up when words such as "Account No.", "Attention:", "Borrower", "SSN" appear nearby.
+- **Name detection without AI**: names found next to "By:", "Name:", "Attention:", "Title:" and in notice/signature blocks, plus a list of common first names. A small custom "deny list" lets the reviewer add terms (e.g. the borrower's name) that are then found everywhere.
+- Later, a self-hosted Presidio service inside your own network could replace these detectors behind the same review screen.
 
 ## User flow
 ```text
-Upload PDF -> Analyze (shows progress) -> Review screen -> Generate redacted PDF -> Download
+Upload PDF -> Analyze -> Review screen -> Generate redacted PDF -> Download
 ```
 
-1. **Upload page**: drag and drop a PDF, plus a "Load sample agreement" button with a made-up credit agreement for demos.
+1. **Upload page**: drag and drop a PDF, plus "Load sample agreement" with a made-up credit agreement.
 2. **Review screen** (split view):
-   - Left: the PDF pages, with highlights over each finding (color by type).
-   - Right: list of findings grouped by type (Person, Email, Account No., Address, Tax ID, ...), each with a checkbox, page number, confidence, and the text snippet.
-   - Actions: accept/reject single items, accept all of a type, filter by confidence, click an item to jump to it on the page, draw a box by hand to add a missed redaction.
-   - Choose style: black box, or a label like `[PERSON]`.
-3. **Generate**: builds the redacted PDF, shows a preview, and offers a download plus a short summary report (counts by type).
+   - Left: PDF pages with color highlights for each finding.
+   - Right: findings grouped by type, each with checkbox, page, confidence and snippet.
+   - Accept/reject single items or a whole type, filter by confidence, click to jump to it, draw a box by hand for anything missed, add deny-list terms.
+   - Redaction style: black box or label like `[ACCOUNT NO]`.
+3. **Generate**: builds the redacted PDF, shows a preview, download plus summary (counts by type).
 
 ## Technical details
-- No accounts or storage needed: everything runs during the session; the file is kept in the browser only.
-- `pdfjs-dist` (loaded only in the browser) reads the text and word positions, and draws the pages.
-- Regex recognizers in `src/lib/pii/recognizers.ts`, with checksum checks where they apply (IBAN, Luhn).
-- AI entity detection: a server function calls Lovable AI (`google/gemini-3-flash-preview`), sending text one page at a time and getting back structured entity results; these are then matched to word positions. Requires turning on Lovable Cloud.
-- Redaction: draw each page as an image with the approved boxes painted on, then put the pages together with `pdf-lib`. This removes the underlying text for real (no text left under the boxes) — a safe default for a demo.
-- Routes: `/` (upload), `/review` (review and generate). State is held in a small in-browser store.
-- Unit tests for the recognizers (email, SSN, IBAN, loan/facility IDs).
-- Design: plain, professional banking look (dark slate color, one accent color, IBM Plex Sans).
+- No Lovable Cloud and no server functions; fully client-side.
+- `pdfjs-dist` (browser-only, lazy-loaded) extracts text with word positions and renders pages.
+- Recognizers in `src/lib/pii/recognizers.ts` with checksums (IBAN mod-97, Luhn, ABA) and context-word scoring.
+- Redaction: each page drawn to an image with approved boxes painted on, reassembled with `pdf-lib` — no hidden text remains under the boxes.
+- Routes: `/` (upload), `/review`. State in a small in-memory store.
+- Unit tests for recognizers.
+- Design: professional banking look (dark slate, one accent, IBM Plex Sans).
 
 ## Out of scope for the demo
-Scanned/image-only PDFs (would need text recognition), saving history, user logins, a real Presidio server.
+Scanned/image-only PDFs, saving history, logins, real Presidio server.
