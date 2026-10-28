@@ -192,8 +192,7 @@ export function analyze(text: string, denyList: string[] = []): Detection[] {
         value = m[rule.group];
         start = m.index + m[0].lastIndexOf(value);
       }
-      if (rule.validate && !rule.validate(value.replace(/[\s-]/g, rule.type === "IBAN" ? " " : "-").trim()))
-        if (!rule.validate(value)) continue;
+      if (rule.validate && !rule.validate(value)) continue;
       const before = text.slice(Math.max(0, start - 60), start);
       if (rule.requireContext && !rule.requireContext.test(before)) continue;
       let score = rule.score;
