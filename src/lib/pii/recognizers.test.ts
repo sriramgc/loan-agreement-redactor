@@ -41,3 +41,21 @@ describe("recognizers", () => {
     expect(r.filter(([t]) => t === "CUSTOM")).toHaveLength(2);
   });
 });
+
+describe("signature blocks", () => {
+  it("finds names after By: /s/", () => {
+    const t = "By: /s/ Denise Jones";
+    expect(analyze(t).map((d) => t.slice(d.start, d.end))).toContain("Denise Jones");
+  });
+});
+
+describe("notice addresses", () => {
+  it("finds street, mail code and state+zip lines", () => {
+    const t = "Two American Lane\n900 W. Trade St\nMail Code: NC1-026-06-04\nChicago, Illinois 60601";
+    const found = analyze(t).map((d) => t.slice(d.start, d.end));
+    expect(found).toContain("Two American Lane");
+    expect(found).toContain("900 W. Trade St");
+    expect(found).toContain("NC1-026-06-04");
+    expect(found).toContain("Illinois 60601");
+  });
+});
