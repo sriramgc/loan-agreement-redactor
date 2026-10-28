@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { analyze, mergeDetections, ENTITY_LABELS, type EntityType } from "@/lib/pii/recognizers";
+import boaAsset from "@/assets/boa-credit-agreement.pdf.asset.json";
 import { presidioAnalyze, presidioHealth } from "@/lib/pii/presidio";
 import { loadPdf, spanToBoxes, buildRedactedPdf, makeSamplePdf, type PageData, type Box } from "@/lib/pii/pdf";
 
@@ -182,9 +183,15 @@ export default function Redactor() {
               }}
             />
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Button variant="outline" onClick={async () => start(await makeSamplePdf(), "sample-credit-agreement.pdf")}>
               <FileText className="h-4 w-4" /> Load sample agreement
+            </Button>
+            <Button
+              variant="outline"
+              onClick={async () => start(await (await fetch(boaAsset.url)).arrayBuffer(), "bofa-gxo-credit-agreement-excerpt.pdf")}
+            >
+              <FileText className="h-4 w-4" /> Bank of America agreement (public SEC filing)
             </Button>
           </div>
           {error && <p className="mt-4 text-sm text-destructive">{error}</p>}

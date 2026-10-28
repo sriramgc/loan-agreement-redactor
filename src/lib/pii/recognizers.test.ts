@@ -41,3 +41,10 @@ describe("recognizers", () => {
     expect(r.filter(([t]) => t === "CUSTOM")).toHaveLength(2);
   });
 });
+
+describe("signature blocks", () => {
+  it("finds names after By: /s/", () => {
+    const t = "By: /s/ Denise Jones";
+    expect(analyze(t).map((d) => t.slice(d.start, d.end))).toContain("Denise Jones");
+  });
+});

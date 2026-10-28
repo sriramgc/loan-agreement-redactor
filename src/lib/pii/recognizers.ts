@@ -164,7 +164,7 @@ const RULES: Rule[] = [
   { type: "ADDRESS", re: /\b[A-Z]{2}\s\d{5}(?:-\d{4})?\b/g, score: 0.6 },
   {
     type: "PERSON",
-    re: /\b(?:Name|Attention|Attn|By|Signed|Guarantor)\s*[:.]\s*((?:[A-Z][a-z]+\.? +(?:[A-Z]\. +)?){1,2}[A-Z][a-zA-Z'-]+)/g,
+    re: /\b(?:Name|Attention|Attn|By|Signed|Guarantor)\s*[:.]\s*(?:\/s\/ *)?((?:[A-Z][a-z]+\.? +(?:[A-Z]\. +)?){1,2}[A-Z][a-zA-Z'-]+)/g,
     score: 0.8,
     group: 1,
   },
