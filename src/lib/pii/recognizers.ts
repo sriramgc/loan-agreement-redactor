@@ -75,7 +75,7 @@ export function luhnValid(raw: string): boolean {
 
 export function abaValid(s: string): boolean {
   if (!/^\d{9}$/.test(s)) return false;
-  const d = s.split("").map(Number);
+  const d = s.split("").map(Number) as [number, number, number, number, number, number, number, number, number];
   const sum = 3 * (d[0] + d[3] + d[6]) + 7 * (d[1] + d[4] + d[7]) + (d[2] + d[5] + d[8]);
   return sum % 10 === 0;
 }
@@ -84,7 +84,7 @@ export function cusipValid(s: string): boolean {
   if (!/^[0-9A-Z]{8}\d$/.test(s)) return false;
   let sum = 0;
   for (let i = 0; i < 8; i++) {
-    const c = s[i];
+    const c = s.charAt(i);
     let v = /\d/.test(c) ? Number(c) : c.charCodeAt(0) - 55;
     if (i % 2 === 1) v *= 2;
     sum += Math.floor(v / 10) + (v % 10);
