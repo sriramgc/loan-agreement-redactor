@@ -157,10 +157,16 @@ const RULES: Rule[] = [
   },
   {
     type: "ADDRESS",
-    re: /\b\d{1,5}\s+(?:[A-Z][a-z]+\s+){1,4}(?:Street|St\.?|Avenue|Ave\.?|Road|Rd\.?|Boulevard|Blvd\.?|Lane|Ln\.?|Drive|Dr\.?|Way|Plaza|Place|Court|Square)(?:,?\s+(?:Suite|Floor|Fl\.?)\s+\d+)?/g,
+    re: /\b(?:\d{1,5}|One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\s+(?:(?:[NSEW]\.?|[A-Z][a-z]+)\s+){1,4}(?:Street|St\.?|Avenue|Ave\.?|Road|Rd\.?|Boulevard|Blvd\.?|Lane|Ln\.?|Drive|Dr\.?|Way|Plaza|Place|Court|Square)(?:,?\s+(?:Suite|Floor|Fl\.?)\s+\d+)?/g,
     score: 0.75,
   },
   { type: "ADDRESS", re: /\b[A-Z]{1,2}\d[A-Z\d]?\s\d[A-Z]{2}\b/g, score: 0.7 },
+  { type: "ADDRESS", re: /\b(?:Mail Code|Mail Stop)\s*:\s*([A-Z0-9][A-Z0-9-]{3,20})/g, score: 0.75, group: 1 },
+  {
+    type: "ADDRESS",
+    re: /\b(?:Alabama|Arizona|California|Colorado|Connecticut|Delaware|Florida|Georgia|Illinois|Massachusetts|Michigan|Minnesota|New Jersey|New York|North Carolina|Ohio|Pennsylvania|Texas|Virginia|Washington) \d{5}(?:-\d{4})?\b/g,
+    score: 0.65,
+  },
   { type: "ADDRESS", re: /\b[A-Z]{2}\s\d{5}(?:-\d{4})?\b/g, score: 0.6 },
   {
     type: "PERSON",
