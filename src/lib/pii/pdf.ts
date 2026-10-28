@@ -54,7 +54,7 @@ export async function loadPdf(bytes: ArrayBuffer): Promise<PageData[]> {
     const v2 = page.getViewport({ scale });
     canvas.width = v2.width;
     canvas.height = v2.height;
-    await page.render({ canvas, canvasContext: canvas.getContext("2d")!, viewport: v2 }).promise;
+    await page.render({ canvasContext: canvas.getContext("2d")!, viewport: v2 }).promise;
     pages.push({ index: i - 1, width: vp.width, height: vp.height, text, segs, image: canvas.toDataURL("image/png") });
   }
   return pages;
